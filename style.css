@@ -146,6 +146,32 @@ h2{
     display: none;
 }
 
+.pagination{
+    --bs-pagination-active-bg: black;
+    --bs-pagination-active-border-color:black;
+    --bs-pagination-focus-box-shadow: none;
+    border-radius: 500px;
+}
+
+.page-link a:focus{
+    box-shadow: 0;
+}
+
+.pagination a{
+    margin-left: 0rem;
+    margin-right: 0rem;
+    color: gray;
+    font-weight: 800;
+    border-color: transparent;
+}
+
+.pagination a:hover{
+    background-color: transparent;
+    border-color: transparent;
+    color: black;
+    scale: 1.1;
+}
+
 @media screen and (max-width:60rem){
     .hidden{
         display: block;
@@ -161,5 +187,20 @@ h2{
 
     .lg-nav i{
         margin: 0.5rem 0rem;
+    }
+
+    #keyword2{
+        width: 10rem;
+        margin: 1rem 0rem;
+        padding-left: 0.5rem;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid black;
+    }
+
+    .search-btn{
+        border: transparent;
+        background-color: transparent;
+        color: black;
     }
 }
