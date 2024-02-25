@@ -7,18 +7,17 @@ menus.forEach(menu=>menu.addEventListener("click",(event)=>getCategory(event)))
 const sideMenu = document.querySelectorAll(".side-menus a")
 sideMenu.forEach(menu=>menu.addEventListener("click",(event)=>getCategory(event)))
 const userInput=document.getElementById("keyword")
-userInput.addEventListener("focus",()=>userInput.value="")
-let url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&apiKey=${API_KEY}&pageSize=20`)
+let url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&apiKey=${API_KEY}`)
 let totalResults = 0
 let page = 1
-const pageSize = 10
+const pageSize = 5
 const groupSize=5
 
 
 const enter=()=>{
     switch(event.key){
         case "Enter": searchNews();
-    }
+    }   
 }
 
 const getNews=async()=>{
@@ -44,22 +43,25 @@ const getNews=async()=>{
 };
 
 const getNewsAll=()=>{
-    url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&apiKey=${API_KEY}&pageSize=20`)
+    page=1;
+    url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&apiKey=${API_KEY}`)
     getNews();
 }
 getNewsAll();
 
 const getCategory=async(event)=>{
+    page = 1;
     const category=event.target.textContent.toLowerCase();
-    url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&category=${category}&apiKey=${API_KEY}&pageSize=20`)
+    url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&category=${category}&apiKey=${API_KEY}`)
     getNews();
 }
 
 const searchNews=async()=>{
+    page = 1;
     const keyword=userInput.value;
-    url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&q=${keyword}&apiKey=${API_KEY}&pageSize=20`)
+    url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&q=${keyword}&apiKey=${API_KEY}`)
     getNews();
-    render();
+    openSearch();
 }
 
 
@@ -80,15 +82,14 @@ const render=()=>{
     document.getElementById("news-article").innerHTML=newsHTML
 }
 
-const getVidioAll=async()=>{
-    let url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&category=sports&apiKey=${API_KEY}&pageSize=7`)
+
+const getVidioAll=async()=>{   
     const response = await fetch(url);
     const data = await response.json();
     newsList=data.articles;
-    vidiorender();
     console.log("hey",newsList);
+    vidiorender();
 }
-getVidioAll();
 
 const vidiorender=()=>{
     const newsHTML=newsList.map(item=>`<div class="small-article">
@@ -98,8 +99,16 @@ const vidiorender=()=>{
     <div>${item.source.name||"No Source"} ${moment(item.publishedAt).fromNow()}</div>
 </div>`).join('');
 
-    document.getElementById("video-article").innerHTML=newsHTML
+    document.getElementById("tech-area").innerHTML=newsHTML
 }
+
+const techCategory=async()=>{
+    url = new URL(`https://ohmynews.netlify.app/top-headlines?country=kr&category=technology&apiKey=${API_KEY}&pageSize=5`)
+    categoryID="tech-area";
+    getVidioAll();
+    vidiorender();
+}
+techCategory();
 
 const imgError=(img)=>{
     img.onerror=null;
@@ -136,7 +145,7 @@ const paginationRender=()=>{
     if(lastPage<totalPage){paginationHTML+=`<li class="page-item" onclick="moveToPage(${page+1})"><a class="page-link" href="#">&gt;</a></li>
     <li class="page-item" onclick="moveToPage(${totalPage})"><a class="page-link" href="#">&gt;&gt;</a></li>`;
     }
-    document.querySelector(".pagination").innerHTML=paginationHTML
+    document.querySelector(".pagination-area").innerHTML=paginationHTML
 }
 
 const moveToPage=(pageNum)=>{
@@ -150,6 +159,7 @@ const openSearch=()=>{
     let inputArea=document.getElementById("input-area")
     if(inputArea.style.display==="block"){
         inputArea.style.display="none";
+        userInput.value="";
     } else{
         inputArea.style.display="block";
     }
